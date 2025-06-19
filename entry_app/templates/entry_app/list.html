@@ -1,0 +1,59 @@
+{% extends 'entry_app/base.html' %}
+
+{% block title %}All Entries - Data Entry System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>All Entries</h2>
+        <a href="{% url 'add_entry' %}" class="btn btn-success">Add New Entry</a>
+    </div>
+    <div class="card-body">
+        {% if entries %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Profession</th>
+                            <th>Area</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in entries %}
+                            <tr>
+                                <td>{{ entry.name }}</td>
+                                <td>
+                                    {{ entry.profession }}
+                                    {% if entry.profession|lower == 'business' %}
+                                        <span class="badge bg-info">Business</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ entry.area }}</td>
+                                <td>{{ entry.city }}</td>
+                                <td>{{ entry.state }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a href="{% url 'edit_entry' entry.id %}" class="btn btn-sm btn-primary">Edit</a>
+                                        <a href="{% url 'delete_entry' entry.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                        {% if entry.profession|lower == 'business' %}
+                                            <a href="{% url 'business_ad' entry.id %}" class="btn btn-sm btn-info">Business Ad</a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p>No entries found. <a href="{% url 'add_entry' %}">Add one</a>!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

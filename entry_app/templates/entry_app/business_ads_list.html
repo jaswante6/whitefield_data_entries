@@ -1,0 +1,92 @@
+{% extends 'entry_app/base.html' %}
+
+{% block title %}Business Advertisements - Data Entry System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Business Advertisements</h2>
+        <div>
+            <a href="{% url 'add_entry' %}" class="btn btn-success me-2">Add Business</a>
+            <a href="{% url 'job_ads_list' %}" class="btn btn-info me-2">View Job Openings</a>
+            <a href="{% url 'list_entries' %}" class="btn btn-secondary">View All Entries</a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if ads %}
+            <div class="row">
+                {% for ad in ads %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">{{ ad.headline }}</h4>
+                                <small>Posted by: {{ ad.business.name }}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h5 class="card-title">Business Details</h5>
+                                    <p class="mb-1"><i class="bi bi-building"></i> {{ ad.business.name }}</p>
+                                    <p class="mb-1"><i class="bi bi-geo-alt"></i> {{ ad.business.area }}, {{ ad.business.city }}, {{ ad.business.state }}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h5 class="card-title">Description</h5>
+                                    <p class="card-text">{{ ad.description }}</p>
+                                </div>
+                                {% if ad.offers %}
+                                <div class="mb-3">
+                                    <h5 class="card-title text-success">Special Offers</h5>
+                                    <div class="alert alert-success">
+                                        <p class="mb-0">{{ ad.offers }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% if ad.home_delivery or ad.free_delivery or ad.delivery_areas %}
+                                <div class="mb-3">
+                                    <h5 class="card-title text-info">Delivery Information</h5>
+                                    <ul class="list-group">
+                                        {% if ad.home_delivery %}
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Home Delivery Available</li>
+                                        {% endif %}
+                                        {% if ad.free_delivery %}
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Free Delivery Available</li>
+                                        {% endif %}
+                                        {% if ad.delivery_areas %}
+                                        <li class="list-group-item"><i class="bi bi-geo-alt"></i> Delivery Areas: {{ ad.delivery_areas }}</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                <div class="mb-3">
+                                    <h5 class="card-title">Keywords</h5>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for keyword in ad.keywords.split|slice:":5" %}
+                                            <span class="badge bg-secondary">{{ keyword }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="text-muted">
+                                    <small>Posted on: {{ ad.created_at|date:"F d, Y" }}</small>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <a href="{% url 'business_ad' ad.business.id %}" class="btn btn-info btn-sm">View Business Profile</a>
+                                <button class="btn btn-success btn-sm" onclick="alert('Contact initiated!')">Contact Business</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p>No business advertisements found. <a href="{% url 'list_entries' %}">View all entries</a> to see if there are any business profiles.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if not ads %}
+<div class="text-center mt-4">
+    <a href="{% url 'list_entries' %}" class="btn btn-primary">Browse All Entries</a>
+</div>
+{% endif %}
+{% endblock %} 

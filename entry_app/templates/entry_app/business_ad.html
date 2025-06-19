@@ -1,0 +1,186 @@
+{% extends 'entry_app/base.html' %}
+
+{% block title %}Business Advertising - Data Entry System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Business Advertising Platform</h2>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info mb-4">
+            <h4 class="alert-heading">Welcome, Business Owner!</h4>
+            <!-- <p>As a business professional, you can advertise your services here.</p> -->
+        </div>
+
+        <div class="business-profile mb-4">
+            <h3>{{ business.name }}'s Business</h3>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-header bg-primary text-white">
+                            <h4>Business Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">Name:</div>
+                                <div class="col-md-8">{{ business.name }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">Business Type:</div>
+                                <div class="col-md-8">{{ business.profession }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">Area:</div>
+                                <div class="col-md-8">{{ business.area }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">City:</div>
+                                <div class="col-md-8">{{ business.city }}</div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 fw-bold">State:</div>
+                                <div class="col-md-8">{{ business.state }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h4>Contact Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><i class="bi bi-geo-alt"></i> {{ business.area }}, {{ business.city }}, {{ business.state }}</p>
+                            <p><i class="bi bi-envelope"></i> contact@{{ business.name|lower|cut:" " }}.com</p>
+                            <p><i class="bi bi-telephone"></i> +1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="business-ad mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4>Promote Your Business</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'business_ad' business.id %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="ad_headline" class="form-label">Headline</label>
+                            <input type="text" class="form-control" id="ad_headline" name="ad_headline" placeholder="Enter a catchy headline">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ad_description" class="form-label">Description</label>
+                            <textarea class="form-control" id="ad_description" name="ad_description" rows="4" placeholder="Describe your business and services"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ad_offers" class="form-label">Special Offers</label>
+                            <textarea class="form-control" id="ad_offers" name="ad_offers" rows="3" placeholder="List your current offers and promotions"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ad_delivery" class="form-label">Delivery Information</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="home_delivery" name="home_delivery">
+                                <label class="form-check-label" for="home_delivery">
+                                    Home Delivery Available
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="free_delivery" name="free_delivery">
+                                <label class="form-check-label" for="free_delivery">
+                                    Free Delivery Available
+                                </label>
+                            </div>
+                            <input type="text" class="form-control mt-2" id="delivery_areas" name="delivery_areas" placeholder="Delivery areas (e.g., within 5km)">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ad_keywords" class="form-label">Keywords</label>
+                            <input type="text" class="form-control" id="ad_keywords" name="ad_keywords" placeholder="Enter keywords separated by commas">
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">Submit Advertisement</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if ads %}
+        <div class="your-ads mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Your Advertisements</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for ad in ads %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h5>{{ ad.headline }}</h5>
+                                    <small class="text-muted">Posted on: {{ ad.created_at|date:"F d, Y" }}</small>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ ad.description }}</p>
+                                    {% if ad.offers %}
+                                    <div class="mb-3">
+                                        <h6 class="text-success">Special Offers:</h6>
+                                        <p>{{ ad.offers }}</p>
+                                    </div>
+                                    {% endif %}
+                                    {% if ad.home_delivery or ad.free_delivery %}
+                                    <div class="mb-3">
+                                        <h6 class="text-info">Delivery Information:</h6>
+                                        <ul class="list-unstyled">
+                                            {% if ad.home_delivery %}
+                                            <li><i class="bi bi-check-circle-fill text-success"></i> Home Delivery Available</li>
+                                            {% endif %}
+                                            {% if ad.free_delivery %}
+                                            <li><i class="bi bi-check-circle-fill text-success"></i> Free Delivery Available</li>
+                                            {% endif %}
+                                            {% if ad.delivery_areas %}
+                                            <li><i class="bi bi-geo-alt"></i> {{ ad.delivery_areas }}</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    {% endif %}
+                                    <div class="mt-2">
+                                        <strong>Keywords:</strong>
+                                        {% for keyword in ad.keywords.split|slice:":5" %}
+                                        <span class="badge bg-secondary">{{ keyword }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="business-tips">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4>Business Tips</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Effective Advertising Strategies</h5>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">Know your target audience</li>
+                        <li class="list-group-item">Create a unique selling proposition</li>
+                        <li class="list-group-item">Utilize social media platforms</li>
+                        <li class="list-group-item">Engage with your customers regularly</li>
+                        <li class="list-group-item">Track and analyze your marketing efforts</li>
+                    </ul>
+                    <p class="text-muted">We're here to help your business grow. For more assistance, contact our support team.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

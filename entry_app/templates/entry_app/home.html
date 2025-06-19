@@ -1,0 +1,85 @@
+{% extends 'entry_app/base.html' %}
+
+{% block title %}Home - Data Entry System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Welcome to Data Entry System</h2>
+    </div>
+    <div class="card-body">
+        <p class="lead">This application allows you to store and manage personal information, business advertisements, and job openings.</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary">
+                        <h4>Personal Information</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Add and manage personal information entries in the database.</p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'add_entry' %}" class="btn btn-primary">Add Entry</a>
+                            <a href="{% url 'list_entries' %}" class="btn btn-outline-primary">View All Entries</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-success">
+                        <h4>Business Advertisements</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Create and browse business advertisements with special offers and delivery options.</p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'business_ads_list' %}" class="btn btn-success">Browse Business Ads</a>
+                            <a href="{% url 'add_entry' %}" class="btn btn-outline-success">Register Business</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-2">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info">
+                        <h4>Job Openings</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>Browse job opportunities or post new openings for your business.</p>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'job_ads_list' %}" class="btn btn-info">Browse Jobs</a>
+                            <a href="{% url 'job_ad_create' %}" class="btn btn-outline-info">Post a Job</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-warning">
+                        <h4>Quick Stats</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Total Entries
+                                <span class="badge bg-primary rounded-pill">{{ entries_count|default:"0" }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Business Advertisements
+                                <span class="badge bg-success rounded-pill">{{ ads_count|default:"0" }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Job Openings
+                                <span class="badge bg-info rounded-pill">{{ jobs_count|default:"0" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

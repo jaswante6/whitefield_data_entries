@@ -1,0 +1,116 @@
+{% extends 'entry_app/base.html' %}
+
+{% block title %}Post Job Recruitment - Data Entry System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h2>Post a Job Opening</h2>
+        <a href="{% url 'job_ads_list' %}" class="btn btn-secondary">View All Jobs</a>
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info mb-4">
+            <h4 class="alert-heading">Hire the Best Candidates!</h4>
+            <p>Fill in the details below to advertise your job opening and reach qualified candidates.</p>
+        </div>
+
+        <form method="post" action="{% url 'job_ad_create' %}">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4>Basic Information</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="job_title" class="form-label">Job Title*</label>
+                                <input type="text" class="form-control" id="job_title" name="job_title" required placeholder="e.g., Marketing Manager">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="company_name" class="form-label">Company Name*</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name" required placeholder="e.g., ABC Corp">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location*</label>
+                                <input type="text" class="form-control" id="location" name="location" required placeholder="e.g., Mumbai, Maharashtra">
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="employment_type" class="form-label">Employment Type</label>
+                                    <select class="form-select" id="employment_type" name="employment_type">
+                                        {% for value, label in employment_types %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="experience_level" class="form-label">Experience Level</label>
+                                    <select class="form-select" id="experience_level" name="experience_level">
+                                        {% for value, label in experience_levels %}
+                                            <option value="{{ value }}">{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="salary_range" class="form-label">Salary Range</label>
+                                <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g., ₹40,000 - ₹60,000 per month">
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="application_deadline" class="form-label">Application Deadline</label>
+                                    <input type="date" class="form-control" id="application_deadline" name="application_deadline">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact_email" class="form-label">Contact Email</label>
+                                    <input type="email" class="form-control" id="contact_email" name="contact_email" placeholder="e.g., hr@company.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <h4>Job Details</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Job Description*</label>
+                                <textarea class="form-control" id="description" name="description" rows="4" required placeholder="Provide a detailed description of the job..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="responsibilities" class="form-label">Responsibilities</label>
+                                <textarea class="form-control" id="responsibilities" name="responsibilities" rows="4" placeholder="List the key responsibilities..."></textarea>
+                                <small class="text-muted">Enter each responsibility on a new line.</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="qualifications" class="form-label">Qualifications</label>
+                                <textarea class="form-control" id="qualifications" name="qualifications" rows="4" placeholder="List required qualifications..."></textarea>
+                                <small class="text-muted">Enter each qualification on a new line.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <a href="{% url 'job_ads_list' %}" class="btn btn-secondary me-md-2">Cancel</a>
+                <button type="submit" class="btn btn-primary">Post Job</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 
